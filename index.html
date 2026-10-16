@@ -1,0 +1,1077 @@
+<!-- ============================================================
+     BART — Balloon Analogue Risk Task (multi-colour, 90 trials)
+     Paste this whole thing into the Softr custom code block.
+
+     EDIT THE CONFIG OBJECT BELOW (search for "CONFIG").
+     Everything else can stay as-is.
+     ============================================================ -->
+
+<div id="bart-app">
+  <div class="bt-frame">
+
+    <!-- ---------- INTRO ---------- -->
+    <section class="bt-screen bt-screen--on" data-screen="intro">
+      <div class="bt-intro bt-intro--wide">
+        <p class="bt-eyebrow">Task</p>
+        <h2 class="bt-title">The balloon</h2>
+        <p class="bt-lede">
+          <b data-main-count>30</b> balloons, one at a time. Pump to build points —
+          but bank them before it bursts.
+        </p>
+
+        <div class="bt-cards">
+
+          <!-- PUMP -->
+          <div class="bt-card">
+            <svg viewBox="0 0 130 92" class="bt-ill" aria-hidden="true">
+              <g class="bt-ill-dim">
+                <line x1="26" y1="52" x2="26" y2="76" />
+                <path d="M21 49 h10 l-5 8 Z" fill="currentColor" stroke="none"/>
+                <ellipse cx="26" cy="38" rx="11" ry="12.5" class="bt-ill-fill-dim"/>
+              </g>
+              <path d="M48 46 h20" class="bt-ill-arrow"/>
+              <path d="M64 41 l6 5 -6 5" class="bt-ill-arrow"/>
+              <line x1="98" y1="66" x2="98" y2="80" class="bt-ill-dim"/>
+              <path d="M92 62 h12 l-6 9 Z" class="bt-ill-balloon" stroke="none"/>
+              <ellipse cx="98" cy="42" rx="20" ry="22" class="bt-ill-balloon" stroke="none"/>
+              <ellipse cx="91" cy="33" rx="4" ry="6" fill="rgba(255,255,255,.35)" stroke="none"/>
+              <text x="98" y="14" class="bt-ill-gain" data-pts-per-pump>+5</text>
+            </svg>
+            <p class="bt-card-k">Pump</p>
+            <p class="bt-card-t">It grows. Points pile up in a temporary bank.</p>
+          </div>
+
+          <!-- BANK -->
+          <div class="bt-card">
+            <svg viewBox="0 0 130 92" class="bt-ill" aria-hidden="true">
+              <ellipse cx="38" cy="34" rx="17" ry="19" class="bt-ill-balloon" stroke="none"/>
+              <ellipse cx="32" cy="26" rx="3.5" ry="5" fill="rgba(255,255,255,.35)" stroke="none"/>
+              <path d="M32 52 h12 l-6 8 Z" class="bt-ill-balloon" stroke="none"/>
+              <path d="M62 44 h18" class="bt-ill-arrow"/>
+              <path d="M76 39 l6 5 -6 5" class="bt-ill-arrow"/>
+              <g class="bt-ill-gain-stroke">
+                <ellipse cx="106" cy="66" rx="17" ry="6"/>
+                <ellipse cx="106" cy="55" rx="17" ry="6"/>
+                <ellipse cx="106" cy="44" rx="17" ry="6"/>
+              </g>
+              <path d="M99 26 l5 6 10 -12" class="bt-ill-tick"/>
+            </svg>
+            <p class="bt-card-k bt-card-k--gain">Bank</p>
+            <p class="bt-card-t">Points are yours for good. The next balloon starts fresh.</p>
+          </div>
+
+          <!-- BURST -->
+          <div class="bt-card">
+            <svg viewBox="0 0 130 92" class="bt-ill" aria-hidden="true">
+              <ellipse cx="38" cy="34" rx="20" ry="22" class="bt-ill-balloon" stroke="none"/>
+              <ellipse cx="31" cy="25" rx="4" ry="6" fill="rgba(255,255,255,.35)" stroke="none"/>
+              <path d="M32 54 h12 l-6 8 Z" class="bt-ill-balloon" stroke="none"/>
+              <path d="M62 44 h18" class="bt-ill-arrow"/>
+              <path d="M76 39 l6 5 -6 5" class="bt-ill-arrow"/>
+              <g class="bt-ill-pop">
+                <path d="M106 20 v-13 M106 68 v13 M84 44 h-13 M128 44 h-11
+                         M91 29 l-9 -9 M121 29 l9 -9 M91 59 l-9 9 M121 59 l9 9"/>
+                <path d="M106 30 l7 9 11 -3 -6 10 6 10 -11 -3 -7 9 -7 -9 -11 3 6 -10 -6 -10 11 3 Z"
+                      class="bt-ill-pop-fill"/>
+              </g>
+            </svg>
+            <p class="bt-card-k bt-card-k--pop">Burst</p>
+            <p class="bt-card-t">Those temporary points are gone. Banked points are safe.</p>
+          </div>
+
+        </div>
+
+        <p class="bt-note">
+          Practice balloons come first and don't count. <kbd>Space</kbd> to pump,
+          <kbd>Enter</kbd> to bank.
+        </p>
+        <button class="bt-btn bt-btn--primary" data-action="start">Start the practice</button>
+      </div>
+    </section>
+
+    <!-- ---------- TASK ---------- -->
+    <section class="bt-screen" data-screen="task">
+      <div class="bt-stage">
+        <svg class="bt-balloon" viewBox="0 0 320 330" aria-hidden="true">
+          <line class="bt-string" x1="160" y1="252" x2="160" y2="316" />
+          <path class="bt-knot" d="M152 246 L168 246 L160 262 Z" />
+          <ellipse class="bt-body" cx="160" cy="150" rx="24" ry="27" />
+          <ellipse class="bt-shine" cx="140" cy="128" rx="8" ry="13" />
+          <g class="bt-shards"></g>
+        </svg>
+        <p class="bt-stage-status" data-stage-status></p>
+      </div>
+
+      <div class="bt-panel">
+        <p class="bt-block-label">
+          <span class="bt-chip" data-chip></span>
+          <span data-colour-name>Blue</span> balloon
+        </p>
+
+        <div class="bt-readout bt-readout--live">
+          <span class="bt-readout-k">In this balloon</span>
+          <span class="bt-readout-v" data-pending>0</span>
+        </div>
+        <div class="bt-readout">
+          <span class="bt-readout-k">Banked total</span>
+          <span class="bt-readout-v bt-readout-v--gain" data-total>0</span>
+        </div>
+        <div class="bt-readout">
+          <span class="bt-readout-k">Pumps</span>
+          <span class="bt-readout-v bt-readout-v--sm" data-pumps>0</span>
+        </div>
+
+        <div class="bt-progress">
+          <div class="bt-progress-head"><span data-progress-label>Balloon 1 of 3</span></div>
+          <div class="bt-rail"><div class="bt-rail-fill" data-rail></div></div>
+        </div>
+
+        <div class="bt-actions">
+          <button class="bt-btn bt-btn--primary" data-action="pump">Pump</button>
+          <button class="bt-btn bt-btn--ghost" data-action="collect">Bank points</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- BREAK ---------- -->
+    <section class="bt-screen" data-screen="break">
+      <div class="bt-intro">
+        <p class="bt-eyebrow">Practice complete</p>
+        <h2 class="bt-title">Now for the real thing</h2>
+        <p class="bt-lede">
+          The next <b data-main-count>90</b> balloons count towards your score. Same rules —
+          pump to build points, bank them before the balloon bursts. The colours arrive in
+          random order.
+        </p>
+        <p class="bt-note">Your practice points don't carry over — you start again from zero.</p>
+        <button class="bt-btn bt-btn--primary" data-action="begin-main">Begin</button>
+      </div>
+    </section>
+
+    <!-- ---------- DONE ---------- -->
+    <section class="bt-screen" data-screen="done">
+      <div class="bt-intro">
+        <p class="bt-eyebrow">Finished</p>
+        <h2 class="bt-title">You banked <span class="bt-final" data-final>0</span> points</h2>
+        <div class="bt-summary">
+          <div><span data-sum-banked>0</span><small>balloons banked</small></div>
+          <div><span data-sum-popped>0</span><small>balloons burst</small></div>
+          <div><span data-sum-pumps>0</span><small>average pumps</small></div>
+        </div>
+        <div class="bt-bycolour" data-bycolour></div>
+        <div class="bt-lb bt-hidden" data-lb>
+          <p class="bt-lb-head"><span data-lb-title>Leaderboard</span><span data-lb-rank></span></p>
+          <div data-lb-rows></div>
+        </div>
+        <p class="bt-send" data-send-status>Saving your results…</p>
+        <div class="bt-endactions">
+          <button class="bt-btn bt-btn--ghost bt-hidden" data-action="retry">Try saving again</button>
+          <button class="bt-btn bt-btn--primary bt-hidden" data-action="again">Play again</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+/* All selectors are scoped under #bart-app so nothing leaks into the Softr page. */
+#bart-app {
+  /* TEF palette */
+  --bt-black:      #1B1C1C;
+  --bt-white:      #FFFFFF;
+  --bt-blue:       #311ADC;
+  --bt-grey-light: #EAE9E7;
+  --bt-grey-dark:  #89877E;
+
+  /* Applied roles */
+  --bt-ink:    var(--bt-black);
+  --bt-ink-2:  #232424;              /* black lifted for the panel gradient */
+  --bt-line:   rgba(234,233,231,.14); /* grey-light at low alpha */
+  --bt-text:   var(--bt-white);
+  --bt-muted:  var(--bt-grey-dark);
+  --bt-accent: var(--bt-blue);
+  --bt-gain:   var(--bt-white);      /* points read as value, in white */
+
+  /* The one colour outside the palette: a burst must read as loss, and the
+     brand has no warning colour. Desaturated to sit with the greys. */
+  --bt-pop:    #D9453F;
+
+  --bt-balloon: #4A34E8;
+
+  /* GM Seagal is the brand face. If the Softr theme already loads it this
+     works as-is; if not, paste the @font-face block from
+     gm-seagal-fontface.css at the top of this <style> tag. */
+  --bt-display: "GM Seagal", "GM Seagal Medium", ui-sans-serif, -apple-system,
+                "Segoe UI", Inter, Roboto, sans-serif;
+  --bt-sans:    "GM Seagal", "GM Seagal Medium", ui-sans-serif, -apple-system,
+                "Segoe UI", Inter, Roboto, sans-serif;
+  --bt-mono:    ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  font-family: var(--bt-sans);
+  color: var(--bt-text);
+  width: 100%;
+  container-type: inline-size;
+}
+#bart-app *, #bart-app *::before, #bart-app *::after { box-sizing: border-box; }
+
+#bart-app .bt-frame {
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  background: radial-gradient(120% 90% at 50% 0%, var(--bt-ink-2) 0%, var(--bt-ink) 68%);
+  border: 1px solid var(--bt-line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+#bart-app .bt-screen { display: none; width: 100%; }
+#bart-app .bt-screen--on { display: flex; }
+
+#bart-app .bt-intro { margin: auto; max-width: 580px; padding: 44px 36px; text-align: center; }
+#bart-app .bt-eyebrow {
+  margin: 0 0 10px; font-family: var(--bt-mono); font-size: 11px;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--bt-muted);
+}
+#bart-app .bt-title {
+  margin: 0 0 16px; font-family: var(--bt-display); font-weight: 500;
+  font-size: clamp(30px, 5cqi, 42px); line-height: 1.1; letter-spacing: -.01em;
+}
+#bart-app .bt-lede { margin: 0 0 26px; font-size: 15.5px; line-height: 1.6; color: var(--bt-grey-light); }
+#bart-app .bt-lede b { color: var(--bt-text); font-weight: 600; }
+
+#bart-app .bt-note { margin: 0 0 28px; font-size: 13px; line-height: 1.6; color: var(--bt-muted); }
+
+/* --- illustrated intro --- */
+#bart-app .bt-intro--wide { max-width: 780px; }
+#bart-app .bt-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin: 0 0 20px; text-align: left;
+}
+#bart-app .bt-card {
+  padding: 16px 16px 18px;
+  border: 1px solid var(--bt-line); border-radius: 11px;
+  background: rgba(255,255,255,.022);
+}
+#bart-app .bt-ill { width: 100%; height: auto; display: block; color: var(--bt-muted); }
+#bart-app .bt-ill-dim { stroke: rgba(255,255,255,.28); stroke-width: 2; fill: none; }
+#bart-app .bt-ill-fill-dim { fill: rgba(255,255,255,.16); stroke: none; }
+#bart-app .bt-ill-balloon { fill: var(--bt-balloon); }
+#bart-app .bt-ill-arrow { stroke: var(--bt-muted); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+#bart-app .bt-ill-gain { fill: var(--bt-gain); font-family: var(--bt-mono); font-size: 15px; font-weight: 600; text-anchor: middle; }
+#bart-app .bt-ill-gain-stroke { fill: rgba(255,255,255,.12); stroke: var(--bt-white); stroke-width: 2; }
+#bart-app .bt-ill-tick { stroke: var(--bt-blue); stroke-width: 3.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+#bart-app .bt-ill-pop { stroke: var(--bt-pop); stroke-width: 2.6; fill: none; stroke-linecap: round; }
+#bart-app .bt-ill-pop-fill { fill: rgba(217,69,63,.18); stroke: var(--bt-pop); stroke-width: 2; stroke-linejoin: round; }
+
+#bart-app .bt-card-k {
+  margin: 12px 0 5px; font-family: var(--bt-mono); font-size: 11px;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--bt-accent);
+}
+#bart-app .bt-card-k--gain { color: var(--bt-blue); }
+#bart-app .bt-card-k--pop  { color: var(--bt-pop); }
+#bart-app .bt-card-t { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--bt-grey-light); }
+
+#bart-app kbd {
+  font-family: var(--bt-mono); font-size: 11px; padding: 2px 6px;
+  border: 1px solid var(--bt-line); border-radius: 4px; color: var(--bt-text);
+}
+
+#bart-app .bt-btn {
+  font: inherit; font-size: 15px; font-weight: 550; padding: 13px 26px;
+  border-radius: 9px; border: 1px solid transparent; cursor: pointer;
+  transition: transform .1s ease, background .15s ease, color .15s ease, opacity .15s ease;
+}
+#bart-app .bt-btn:focus-visible { outline: 2px solid var(--bt-accent); outline-offset: 3px; }
+#bart-app .bt-btn:active { transform: translateY(1px); }
+#bart-app .bt-btn[disabled] { opacity: .38; cursor: default; transform: none; }
+#bart-app .bt-btn--primary { background: var(--bt-blue); color: var(--bt-white); }
+#bart-app .bt-btn--primary:not([disabled]):hover { background: #4426F0; }
+#bart-app .bt-btn--ghost { background: transparent; color: var(--bt-text); border-color: rgba(234,233,231,.30); }
+#bart-app .bt-btn--ghost:not([disabled]):hover { background: rgba(234,233,231,.08); }
+#bart-app .bt-hidden { display: none; }
+
+#bart-app [data-screen="task"] { align-items: stretch; }
+#bart-app .bt-stage {
+  flex: 1 1 auto; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 20px; min-width: 0;
+}
+#bart-app .bt-balloon { width: 100%; max-width: 330px; height: auto; overflow: visible; }
+#bart-app .bt-body {
+  fill: var(--bt-balloon);
+  transition: rx .16s cubic-bezier(.34,1.4,.64,1), ry .16s cubic-bezier(.34,1.4,.64,1),
+              cy .16s ease, fill .25s linear;
+}
+#bart-app .bt-shine { fill: rgba(255,255,255,.32); transition: all .16s ease; }
+#bart-app .bt-knot { fill: var(--bt-balloon); transition: fill .25s linear; }
+#bart-app .bt-string { stroke: rgba(255,255,255,.24); stroke-width: 1.5; }
+#bart-app .bt-shards line { stroke: var(--bt-pop); stroke-width: 3; stroke-linecap: round; }
+#bart-app .bt-shards { transform-origin: 160px 150px; opacity: 0; }
+
+#bart-app .bt-balloon.is-popping .bt-body,
+#bart-app .bt-balloon.is-popping .bt-shine,
+#bart-app .bt-balloon.is-popping .bt-knot,
+#bart-app .bt-balloon.is-popping .bt-string { opacity: 0; transition: opacity .05s; }
+#bart-app .bt-balloon.is-popping .bt-shards { animation: bt-burst .42s ease-out forwards; }
+@keyframes bt-burst {
+  0%   { opacity: 1; transform: scale(.35); }
+  100% { opacity: 0; transform: scale(1.25); }
+}
+
+#bart-app .bt-stage-status {
+  margin: 4px 0 0; min-height: 24px; font-family: var(--bt-mono); font-size: 12.5px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--bt-muted);
+}
+#bart-app .bt-stage-status.is-pop  { color: var(--bt-pop); }
+#bart-app .bt-stage-status.is-bank { color: var(--bt-gain); }
+
+#bart-app .bt-panel {
+  flex: 0 0 288px; display: flex; flex-direction: column; gap: 18px;
+  padding: 34px 30px; border-left: 1px solid var(--bt-line); background: rgba(0,0,0,.20);
+}
+#bart-app .bt-block-label {
+  margin: 0; display: flex; align-items: center; gap: 8px;
+  font-family: var(--bt-mono); font-size: 11px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--bt-muted);
+}
+#bart-app .bt-chip {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--bt-balloon); flex: 0 0 auto; transition: background .25s linear;
+}
+#bart-app .bt-readout { display: flex; flex-direction: column; gap: 3px; }
+#bart-app .bt-readout-k { font-size: 12px; letter-spacing: .04em; color: var(--bt-muted); }
+#bart-app .bt-readout-v {
+  font-family: var(--bt-mono); font-size: 30px;
+  font-variant-numeric: tabular-nums; line-height: 1.15;
+}
+#bart-app .bt-readout-v--gain { color: var(--bt-gain); }
+#bart-app .bt-readout-v--sm { font-size: 18px; color: var(--bt-grey-light); }
+
+#bart-app .bt-progress { margin-top: auto; }
+#bart-app .bt-progress-head {
+  font-family: var(--bt-mono); font-size: 11px; letter-spacing: .08em;
+  color: var(--bt-muted); margin-bottom: 8px;
+}
+#bart-app .bt-rail { height: 3px; background: var(--bt-line); border-radius: 2px; overflow: hidden; }
+#bart-app .bt-rail-fill { height: 100%; width: 0; background: var(--bt-accent); transition: width .3s ease; }
+#bart-app .bt-actions { display: flex; flex-direction: column; gap: 10px; }
+
+#bart-app .bt-final { font-family: var(--bt-mono); color: var(--bt-gain); }
+#bart-app .bt-summary {
+  display: flex; justify-content: center; gap: 34px; margin: 0 0 22px;
+  padding: 20px 0; border-top: 1px solid var(--bt-line); border-bottom: 1px solid var(--bt-line);
+}
+#bart-app .bt-summary div { display: flex; flex-direction: column; gap: 5px; }
+#bart-app .bt-summary span { font-family: var(--bt-mono); font-size: 24px; }
+#bart-app .bt-summary small { font-size: 11.5px; color: var(--bt-muted); }
+
+#bart-app .bt-bycolour { margin: 0 0 24px; }
+#bart-app .bt-row {
+  display: grid; grid-template-columns: 14px 1fr auto auto;
+  align-items: center; gap: 12px; padding: 8px 0;
+  border-bottom: 1px solid var(--bt-line);
+  font-size: 13px; color: var(--bt-grey-light);
+}
+#bart-app .bt-row:first-child { border-top: 1px solid var(--bt-line); }
+#bart-app .bt-row i { width: 9px; height: 9px; border-radius: 50%; display: block; }
+#bart-app .bt-row b { font-family: var(--bt-mono); font-weight: 400; font-variant-numeric: tabular-nums; }
+#bart-app .bt-row em { font-style: normal; font-size: 11px; color: var(--bt-muted); }
+
+#bart-app .bt-send { margin: 0 0 16px; font-size: 13px; color: var(--bt-muted); }
+#bart-app .bt-send.is-ok   { color: var(--bt-grey-light); }
+#bart-app .bt-send.is-fail { color: var(--bt-pop); }
+
+#bart-app .bt-lb { margin: 0 0 22px; text-align: left; }
+#bart-app .bt-lb-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin: 0 0 10px; font-family: var(--bt-mono); font-size: 11px;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--bt-muted);
+}
+#bart-app .bt-lb-head span:last-child { color: var(--bt-gain); letter-spacing: .06em; }
+#bart-app .bt-lbrow {
+  display: grid; grid-template-columns: 30px 1fr auto auto;
+  align-items: center; gap: 12px; padding: 7px 10px;
+  border-radius: 7px; font-size: 13.5px; color: var(--bt-grey-light);
+}
+#bart-app .bt-lbrow + .bt-lbrow { border-top: 1px solid var(--bt-line); border-radius: 0; }
+#bart-app .bt-lbrow--me { background: rgba(49,26,220,.30); color: var(--bt-text); border-top-color: transparent; }
+#bart-app .bt-lbrow--gap { opacity: .5; justify-content: center; padding: 2px 10px; }
+#bart-app .bt-lb-pos { font-family: var(--bt-mono); font-size: 12px; color: var(--bt-muted); }
+#bart-app .bt-lbrow--me .bt-lb-pos { color: var(--bt-accent); }
+#bart-app .bt-lb-pts { font-family: var(--bt-mono); font-variant-numeric: tabular-nums; color: var(--bt-gain); }
+#bart-app .bt-lb-att { font-family: var(--bt-mono); font-size: 11px; color: var(--bt-muted); }
+#bart-app .bt-lb-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#bart-app .bt-endactions { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+#bart-app .bt-endactions .bt-btn { min-width: 220px; }
+
+@container (max-width: 720px) {
+  #bart-app [data-screen="task"] { flex-direction: column; }
+  #bart-app .bt-panel {
+    flex: 0 0 auto; border-left: none; border-top: 1px solid var(--bt-line);
+    padding: 22px 24px 26px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px;
+  }
+  #bart-app .bt-block-label, #bart-app .bt-progress, #bart-app .bt-actions { grid-column: 1 / -1; }
+  #bart-app .bt-progress { margin-top: 4px; }
+  #bart-app .bt-actions { flex-direction: row; }
+  #bart-app .bt-actions .bt-btn { flex: 1; }
+  #bart-app .bt-readout-v { font-size: 24px; }
+  #bart-app .bt-intro { padding: 34px 22px; }
+  #bart-app .bt-summary { gap: 20px; }
+  #bart-app .bt-cards { grid-template-columns: 1fr; gap: 10px; }
+  #bart-app .bt-card { display: grid; grid-template-columns: 96px 1fr; gap: 4px 16px; align-items: center; }
+  #bart-app .bt-card .bt-ill { grid-row: 1 / 3; }
+  #bart-app .bt-card-k { margin: 0 0 3px; align-self: end; }
+  #bart-app .bt-card-t { align-self: start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #bart-app *, #bart-app *::before, #bart-app *::after {
+    transition-duration: .01ms !important; animation-duration: .01ms !important;
+  }
+}
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ============================================================
+     CONFIG — this is the only part you need to edit
+     ============================================================ */
+  var CONFIG = {
+
+    // Your n8n webhook URL. Leave "" to test without sending anything.
+    endpoint: "https://techeuropefoundation.app.n8n.cloud/webhook/bart",
+
+    // Points added to the temporary bank per pump.
+    pointsPerPump: 5,
+
+    // The balloon conditions. The burst point is drawn uniformly from
+    // 1..maxPumps, so the AVERAGE burst point is maxPumps / 2.
+    //   blue 128 -> avg 64  |  yellow 32 -> avg 16  |  orange 8 -> avg 4
+    // These are the three standard PsyToolkit conditions. Add or remove a
+    // row here and the trial queue, summary screen and payload all adapt --
+    // but a new colour also needs four new Airtable fields.
+    conditions: [
+      { colour: "blue",   hex: "#4A34E8", maxPumps: 128, count: 10 },
+      { colour: "yellow", hex: "#E8B22E", maxPumps: 32,  count: 10 },
+      { colour: "orange", hex: "#EE8A3F", maxPumps: 8,   count: 10 }
+    ],
+
+    // Practice balloons. These are excluded from every score.
+    practice: ["blue", "yellow", "orange"],
+
+    // Extra fields to copy from the Softr logged-in user into the payload.
+    // Every name here needs a matching column in Balloon Game -- the Airtable
+    // node auto-maps on key name, so an unknown key is a hard 422.
+    // To see what Softr exposes, open devtools on the game page, switch the
+    // console context from "top" to the preview-iframe, and run:
+    //     console.log(window.logged_in_user)
+    //
+    // Flattened to a comma-separated string -> Airtable Single line text.
+    extraUserFields: [],
+
+    // Kept as an array of record ids -> Airtable "Link to another record".
+    // Only two links are needed, and each points at a different table:
+    //   person_airtable_record_id            -> People
+    //   person_active_ignition_participation -> Person_Participations
+    // The latter is empty for people with no active participation, which is
+    // correct rather than a fault. The program / latest / application
+    // variants were dropped: they duplicated this data and the application
+    // one pointed at a third table entirely.
+    extraUserLinkFields: [
+      "person_airtable_record_id",
+      "person_active_ignition_participation"
+    ],
+
+    // Show a "Play again" button on the results screen. Each replay writes a
+    // separate Airtable row with a new session_id and attempt_number.
+    // Set to false to allow one attempt per page load.
+    allowReplay: true,
+
+    // A label stored with the session so you can tell task configurations
+    // apart later. Describes the TASK, not who played it.
+    // For a quick end-to-end test, set each count above to 1 and this to "test".
+    configLabel: "3colour-30",
+
+    // Which cohort this session belongs to. Describes the PLAYER POOL, not
+    // the task. Written to the "phase" column in Balloon Game.
+    //   "pre-selection" - the open applicant pool, anyone could play
+    //   "selected"      - only selected applicants can reach the game
+    // Rows already in Airtable predate this field and must be backfilled to
+    // "pre-selection" by hand.
+    phase: "selected"
+  };
+  /* ========================== end CONFIG ====================== */
+
+
+  var root = document.getElementById("bart-app");
+  if (!root) return;
+
+  var $  = function (s) { return root.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
+
+  var byColour = {};
+  CONFIG.conditions.forEach(function (c) { byColour[c.colour] = c; });
+
+  /* ---------- Softr user ----------
+     Softr names these properties after the columns in your Airtable users
+     table, so the key for an email could be "email", "Email address",
+     "Work Email" and so on. Rather than guess, we look at the values:
+     an email contains an @, a record id starts with "rec". */
+  function readUser() {
+    var u = (window.logged_in_user || window.loggedInUser || {});
+    if (u && u.fields && typeof u.fields === "object") u = u.fields;
+
+    var emailRe = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    var recRe   = /^rec[A-Za-z0-9]{14}$/;
+    var email = "", record = "", name = "";
+    var keys = Object.keys(u);
+
+    // Prefer a key that mentions "mail", then fall back to any @-shaped value.
+    keys.forEach(function (k) {
+      var v = u[k];
+      if (typeof v !== "string" || !emailRe.test(v.trim())) return;
+      if (!email || /mail/i.test(k)) email = v.trim();
+    });
+
+    keys.forEach(function (k) {
+      var v = u[k];
+      if (typeof v !== "string" || !recRe.test(v.trim())) return;
+      if (!record || /record/i.test(k)) record = v.trim();
+    });
+
+    var nameKeys = ["Name", "name", "full_name", "Full Name", "fullName",
+                    "first_name", "First Name"];
+    for (var i = 0; i < nameKeys.length; i++) {
+      var v = u[nameKeys[i]];
+      if (typeof v === "string" && v.trim()) { name = v.trim(); break; }
+    }
+
+    // Uncomment while debugging to see exactly what Softr provides:
+    // console.log("[BART] logged_in_user:", u);
+
+    // Extra fields named in CONFIG. Softr scatters these across the top level
+    // and a __UNIFIED sub-object, so check both. Linked records arrive as
+    // arrays of record ids, sometimes as {id,name} objects.
+    function grab(k) {
+      if (u[k] !== undefined) return u[k];
+      if (u.__UNIFIED && u.__UNIFIED[k] !== undefined) return u.__UNIFIED[k];
+      return undefined;
+    }
+    function asText(v) {
+      if (Array.isArray(v)) {
+        return v.map(function (x) {
+          return (x && typeof x === "object") ? (x.name || x.label || x.id || "") : x;
+        }).filter(Boolean).join(", ");
+      }
+      if (v && typeof v === "object") return v.name || v.label || v.id || "";
+      if (typeof v === "boolean") return v ? "yes" : "no";
+      return (v == null) ? "" : String(v);
+    }
+
+    var extra = {};
+    (CONFIG.extraUserFields || []).forEach(function (k) {
+      extra[k] = asText(grab(k));
+    });
+
+    // Link fields stay as arrays of record ids -- Airtable link columns
+    // require that shape, and a comma-joined string would be rejected or,
+    // worse, silently create new records under typecast.
+    (CONFIG.extraUserLinkFields || []).forEach(function (k) {
+      var v = grab(k);
+      if (v == null) { extra[k] = []; return; }
+      if (!Array.isArray(v)) v = [v];
+      extra[k] = v.map(function (x) {
+        return (x && typeof x === "object") ? (x.id || "") : String(x);
+      }).filter(function (s) { return /^rec[A-Za-z0-9]{14}$/.test(s); });
+    });
+
+    return { email: email, name: name, record_id: record, extra: extra };
+  }
+
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  /* ---------- build the trial queue ----------
+     Rebuilt for every attempt so a replay gets a fresh random order and
+     fresh burst points, never a repeat of the sequence just played. */
+  var practice = [], queue = [], mainTotal = 0;
+
+  function buildQueue(includePractice) {
+    practice = includePractice ? CONFIG.practice.map(function (name, i) {
+      var c = byColour[name] || CONFIG.conditions[0];
+      return { block: "training", colour: c.colour, maxPumps: c.maxPumps, training: true, n: i + 1 };
+    }) : [];
+
+    var main = [];
+    CONFIG.conditions.forEach(function (c) {
+      for (var i = 0; i < c.count; i++) {
+        main.push({ block: "experiment", colour: c.colour, maxPumps: c.maxPumps, training: false });
+      }
+    });
+    shuffle(main);
+    main.forEach(function (b, i) { b.n = i + 1; });
+
+    mainTotal = main.length;
+    queue = practice.concat(main);
+  }
+
+  buildQueue(true);
+
+  function newSessionId() {
+    return "bart-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
+  }
+
+  var S = {
+    sessionId: newSessionId(),
+    attempt: 1,
+    startedAt: null,
+    i: 0, pumps: 0, burstPoint: 0, rts: [], lastPumpAt: 0,
+    sessionClock0: performance.now(), pumpTimes: [], balloonStartMs: 0,
+    totalEarnings: 0, potentialTotal: 0,
+    unexplodedPumps: [], trials: [],
+    busy: false, sent: false, breakShown: false, mainStarted: false
+  };
+
+  /* ---------- elements ---------- */
+  var el = {
+    balloon:  $(".bt-balloon"),
+    body:     $(".bt-body"),
+    shine:    $(".bt-shine"),
+    shards:   $(".bt-shards"),
+    status:   $("[data-stage-status]"),
+    colour:   $("[data-colour-name]"),
+    pending:  $("[data-pending]"),
+    total:    $("[data-total]"),
+    pumpsOut: $("[data-pumps]"),
+    progLbl:  $("[data-progress-label]"),
+    rail:     $("[data-rail]"),
+    btnPump:  $('[data-action="pump"]'),
+    btnColl:  $('[data-action="collect"]'),
+    send:     $("[data-send-status]"),
+    retry:    $('[data-action="retry"]'),
+    again:    $('[data-action="again"]')
+  };
+
+  // Null-safe: if a copy edit removes one of these elements, the substitution
+  // is skipped rather than throwing and killing the rest of the script.
+  function setText(sel, val) {
+    $$(sel).forEach(function (n) { n.textContent = val; });
+  }
+  setText("[data-pts-per-pump]", "+" + CONFIG.pointsPerPump);
+  setText("[data-main-count]", mainTotal);
+
+  (function drawShards() {
+    var svgns = "http://www.w3.org/2000/svg", frag = document.createDocumentFragment();
+    for (var i = 0; i < 12; i++) {
+      var a = (i / 12) * Math.PI * 2;
+      var ln = document.createElementNS(svgns, "line");
+      ln.setAttribute("x1", 160 + Math.cos(a) * 42);
+      ln.setAttribute("y1", 150 + Math.sin(a) * 42);
+      ln.setAttribute("x2", 160 + Math.cos(a) * 96);
+      ln.setAttribute("y2", 150 + Math.sin(a) * 96);
+      frag.appendChild(ln);
+    }
+    el.shards.appendChild(frag);
+  })();
+
+  function show(name) {
+    $$(".bt-screen").forEach(function (s) {
+      s.classList.toggle("bt-screen--on", s.getAttribute("data-screen") === name);
+    });
+  }
+
+  /* ---------- drawing ----------
+     Growth per pump is identical for every colour on purpose. Scaling the
+     balloon to each colour's maximum would reveal the burst profile. */
+  function drawBalloon() {
+    var r  = 24 + 82 * (1 - Math.exp(-S.pumps / 25));
+    var ry = r * 1.12;
+    el.body.setAttribute("rx", r.toFixed(1));
+    el.body.setAttribute("ry", ry.toFixed(1));
+    el.body.setAttribute("cy", (246 - ry).toFixed(1));
+    el.shine.setAttribute("cx", (160 - r * 0.46).toFixed(1));
+    el.shine.setAttribute("cy", (246 - ry - ry * 0.36).toFixed(1));
+    el.shine.setAttribute("rx", (r * 0.15).toFixed(1));
+    el.shine.setAttribute("ry", (ry * 0.20).toFixed(1));
+  }
+
+  function refresh() {
+    var b = queue[S.i];
+    el.pending.textContent  = S.pumps * CONFIG.pointsPerPump;
+    el.total.textContent    = S.totalEarnings;
+    el.pumpsOut.textContent = S.pumps;
+
+    var done = queue.slice(0, S.i).filter(function (x) { return x.training === b.training; }).length;
+    var tot  = b.training ? practice.length : mainTotal;
+    el.progLbl.textContent = (b.training ? "Practice balloon " : "Balloon ") + (done + 1) + " of " + tot;
+    el.rail.style.width = ((done / tot) * 100).toFixed(1) + "%";
+
+    el.btnColl.disabled = S.busy || S.pumps === 0;
+    el.btnPump.disabled = S.busy;
+  }
+
+  function setStatus(text, kind) {
+    el.status.textContent = text || "";
+    el.status.className = "bt-stage-status" + (kind ? " is-" + kind : "");
+  }
+
+  /* ---------- trial flow ---------- */
+  function nextBalloon() {
+    if (S.i >= queue.length) return finish();
+    var b = queue[S.i];
+
+    if (S.i > 0 && queue[S.i - 1].training && !b.training && !S.breakShown) {
+      S.breakShown = true;
+      show("break");
+      return;
+    }
+
+    // Practice does not carry over. Wipe the running counters the first time
+    // a scored balloon comes up, so the participant starts the real task at zero.
+    if (!b.training && !S.mainStarted) {
+      S.mainStarted = true;
+      S.totalEarnings = 0;
+      S.potentialTotal = 0;
+      S.unexplodedPumps = [];
+    }
+
+    S.pumps = 0; S.rts = []; S.lastPumpAt = 0; S.busy = false; S.bankRt = 0;
+    S.balloonStartAt = performance.now(); S.firstPumpAt = 0;
+    S.pumpTimes = [];
+    S.balloonStartMs = Math.round(S.balloonStartAt - S.sessionClock0);
+    S.burstPoint = Math.floor(Math.random() * b.maxPumps) + 1;
+
+    root.style.setProperty("--bt-balloon", (byColour[b.colour] || {}).hex || "#4A34E8");
+    el.colour.textContent = b.colour.charAt(0).toUpperCase() + b.colour.slice(1);
+    el.balloon.classList.remove("is-popping");
+
+    drawBalloon();
+    setStatus("");
+    refresh();
+    show("task");
+  }
+
+  function pump() {
+    if (S.busy) return;
+    var now = performance.now();
+    if (!S.firstPumpAt) S.firstPumpAt = now;
+    S.pumpTimes.push(Math.round(now - S.sessionClock0));
+    if (S.lastPumpAt) S.rts.push(now - S.lastPumpAt);
+    S.lastPumpAt = now;
+    S.pumps += 1;
+    if (S.pumps >= S.burstPoint) return endBalloon(true);
+    drawBalloon();
+    refresh();
+  }
+
+  function collect() {
+    if (S.busy || S.pumps === 0) return;
+    // Time between the last pump and the decision to bank — a deliberation
+    // measure that the inter-pump intervals don't capture.
+    S.bankRt = S.lastPumpAt ? Math.round(performance.now() - S.lastPumpAt) : 0;
+    endBalloon(false);
+  }
+
+  function endBalloon(exploded) {
+    S.busy = true;
+    var b = queue[S.i];
+    var earned = exploded ? 0 : S.pumps * CONFIG.pointsPerPump;
+    var potential = (S.burstPoint - 1) * CONFIG.pointsPerPump;
+
+    S.totalEarnings += earned;
+    S.potentialTotal += potential;
+    if (!exploded) S.unexplodedPumps.push(S.pumps);
+
+    var adjusted = S.unexplodedPumps.length
+      ? S.unexplodedPumps.reduce(function (a, c) { return a + c; }, 0) / S.unexplodedPumps.length : 0;
+    var meanRt = S.rts.length
+      ? S.rts.reduce(function (a, c) { return a + c; }, 0) / S.rts.length : 0;
+
+    S.trials.push({
+      block: b.block,                        // col 1
+      colour: b.colour,                      // col 2
+      balloon_number: b.n,                   // col 3
+      pumps: S.pumps,                        // col 4
+      exploded: exploded ? 1 : 0,            // col 5
+      earnings: earned,                      // col 6
+      total_earnings: S.totalEarnings,       // col 7
+      adjusted_score: +adjusted.toFixed(3),  // col 8
+      mean_pump_rt_ms: Math.round(meanRt),   // col 9
+      potential_earnings: potential,         // col 10
+      potential_total: S.potentialTotal,     // col 11
+      burst_point: S.burstPoint,
+      max_pumps: b.maxPumps,
+      duration_ms: Math.round(performance.now() - S.balloonStartAt),
+      time_to_first_pump_ms: S.firstPumpAt ? Math.round(S.firstPumpAt - S.balloonStartAt) : 0,
+      bank_decision_rt_ms: exploded ? 0 : (S.bankRt || 0),
+      balloon_start_ms: S.balloonStartMs,
+      pump_times: S.pumpTimes.slice(),
+      end_ms: Math.round(performance.now() - S.sessionClock0),
+      training: b.training ? 1 : 0
+    });
+
+    if (exploded) {
+      el.balloon.classList.add("is-popping");
+      setStatus("Burst — points lost", "pop");
+    } else {
+      setStatus("Banked " + earned + " points", "bank");
+    }
+
+    el.pending.textContent = exploded ? 0 : earned;
+    el.total.textContent = S.totalEarnings;
+    refresh();
+
+    setTimeout(function () { S.i += 1; nextBalloon(); }, exploded ? 900 : 700);
+  }
+
+  /* ---------- finish + send ---------- */
+  var sum = function (arr, f) { return arr.reduce(function (a, c) { return a + f(c); }, 0); };
+  var mean = function (arr, f) { return arr.length ? sum(arr, f) / arr.length : 0; };
+
+  function statsFor(rows) {
+    var banked = rows.filter(function (t) { return !t.exploded; });
+    return {
+      balloons:   rows.length,
+      banked:     banked.length,
+      popped:     rows.length - banked.length,
+      earnings:   sum(rows, function (t) { return t.earnings; }),
+      mean_pumps: +mean(rows, function (t) { return t.pumps; }).toFixed(2),
+      adjusted:   +mean(banked, function (t) { return t.pumps; }).toFixed(2)
+    };
+  }
+
+  function finish() {
+    var scored = S.trials.filter(function (t) { return !t.training; });
+    var overall = statsFor(scored);
+    var rtRows = scored.filter(function (t) { return t.mean_pump_rt_ms > 0; });
+
+    var finishedAt = new Date();
+    var user = readUser();
+
+    var payload = {
+      session_id:     S.sessionId,
+      attempt_number: S.attempt,
+      started_at:     S.startedAt.toISOString(),
+      finished_at:    finishedAt.toISOString(),
+      duration_ms:    finishedAt - S.startedAt,
+      completed:      true,
+
+      user_email:     user.email,
+      user_name:      user.name,
+      user_record_id: user.record_id,
+      page_url:       window.location.href,
+      user_agent:     navigator.userAgent,
+
+      config_label:    CONFIG.configLabel,
+      phase:           CONFIG.phase,
+      points_per_pump: CONFIG.pointsPerPump,
+      colours_used:    CONFIG.conditions.map(function (c) { return c.colour; }).join(", "),
+
+      balloons_total:      overall.balloons,
+      balloons_banked:     overall.banked,
+      balloons_popped:     overall.popped,
+      total_earnings:      overall.earnings,
+      total_pumps:         sum(scored, function (t) { return t.pumps; }),
+      mean_pumps:          overall.mean_pumps,
+      adjusted_bart_score: overall.adjusted,
+      mean_pump_rt_ms:     Math.round(mean(rtRows, function (t) { return t.mean_pump_rt_ms; })),
+      potential_total:     sum(scored, function (t) { return t.potential_earnings; }),
+
+      by_colour: {},
+      trials: S.trials,
+      trials_csv: toCsv(S.trials)
+    };
+
+    // Extra Softr user fields (see CONFIG.extraUserFields).
+    Object.keys(user.extra || {}).forEach(function (k) {
+      payload[k] = user.extra[k];
+    });
+
+    // Flat per-colour fields so they map straight onto Airtable columns,
+    // plus a nested copy for anything you want to do in n8n.
+    var rows = "";
+    CONFIG.conditions.forEach(function (c) {
+      var st = statsFor(scored.filter(function (t) { return t.colour === c.colour; }));
+      payload.by_colour[c.colour] = st;
+      payload[c.colour + "_adjusted"]   = st.adjusted;
+      payload[c.colour + "_mean_pumps"] = st.mean_pumps;
+      payload[c.colour + "_popped"]     = st.popped;
+      payload[c.colour + "_earnings"]   = st.earnings;
+
+      rows += '<div class="bt-row"><i style="background:' + c.hex + '"></i>' +
+              '<span>' + c.colour.charAt(0).toUpperCase() + c.colour.slice(1) + '</span>' +
+              '<b>' + st.mean_pumps.toFixed(1) + ' <em>avg pumps</em></b>' +
+              '<b>' + st.popped + ' <em>burst</em></b></div>';
+    });
+
+    $("[data-final]").textContent      = overall.earnings;
+    $("[data-sum-banked]").textContent = overall.banked;
+    $("[data-sum-popped]").textContent = overall.popped;
+    $("[data-sum-pumps]").textContent  = overall.mean_pumps.toFixed(1);
+    $("[data-bycolour]").innerHTML     = rows;
+
+    show("done");
+    send(payload);
+    el.retry.onclick = function () { send(payload); };
+  }
+
+  /* Columns 1-11 are the PsyToolkit output format, unchanged.
+     Then: 12 outcome (banked/burst), 13 burst_point, 14 max_pumps,
+     15 balloon_start_ms, 16 end_ms, 17 pump_times.
+
+     All times are milliseconds from the start of the attempt. pump_times is
+     pipe-separated, one entry per pump. Everything else is derivable:
+       duration          = end_ms - balloon_start_ms
+       time to 1st pump  = pump_times[0] - balloon_start_ms
+       inter-pump gaps   = successive differences of pump_times
+       bank hesitation   = end_ms - last pump_time  (banked balloons only) */
+  function toCsv(trials) {
+    return trials.map(function (t) {
+      return [t.block, t.colour, t.balloon_number, t.pumps, t.exploded, t.earnings,
+              t.total_earnings, t.adjusted_score, t.mean_pump_rt_ms,
+              t.potential_earnings, t.potential_total,
+              t.exploded ? "burst" : "banked",
+              t.burst_point, t.max_pumps,
+              t.balloon_start_ms, t.end_ms,
+              t.pump_times.join("|")].join(",");
+    }).join("\n");
+  }
+
+  /* ---------- leaderboard ----------
+     Rendered from the JSON n8n returns to the save request. If the response
+     has no leaderboard, the section stays hidden and nothing else changes. */
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  function renderLeaderboard(data) {
+    var box = $("[data-lb]");
+    if (!box || !data || !data.leaderboard || !data.leaderboard.length) return;
+
+    var top = data.leaderboard.slice(0, 10);
+    var you = data.you || {};
+    var inTop = you.rank && you.rank <= top.length;
+
+    var html = top.map(function (r, i) {
+      var me = you.rank === i + 1;
+      return '<div class="bt-lbrow' + (me ? " bt-lbrow--me" : "") + '">' +
+             '<span class="bt-lb-pos">' + (i + 1) + '</span>' +
+             '<span class="bt-lb-name">' + esc(r.name || "Anonymous") + '</span>' +
+             '<span class="bt-lb-pts">' + esc(r.score) + '</span>' +
+             '<span class="bt-lb-att">' + esc(r.attempts || 1) + '&times;</span>' +
+             '</div>';
+    }).join("");
+
+    // Outside the top ten: show their own row pinned below, with a gap marker.
+    if (you.rank && !inTop) {
+      html += '<div class="bt-lbrow bt-lbrow--gap"><span></span><span>&middot; &middot; &middot;</span><span></span><span></span></div>' +
+              '<div class="bt-lbrow bt-lbrow--me">' +
+              '<span class="bt-lb-pos">' + esc(you.rank) + '</span>' +
+              '<span class="bt-lb-name">You</span>' +
+              '<span class="bt-lb-pts">' + esc(you.best != null ? you.best : you.score) + '</span>' +
+              '<span class="bt-lb-att">' + esc(you.attempts || S.attempt) + '&times;</span>' +
+              '</div>';
+    }
+
+    $("[data-lb-rows]").innerHTML = html;
+    $("[data-lb-rank]").textContent = you.rank
+      ? "you're " + you.rank + (you.total ? " of " + you.total : "")
+      : "";
+    box.classList.remove("bt-hidden");
+  }
+
+  function send(payload) {
+    if (S.sent) return;
+
+    if (!CONFIG.endpoint) {
+      el.send.textContent = "No endpoint set — results were not saved. Add your n8n URL to CONFIG.endpoint.";
+      el.send.className = "bt-send is-fail";
+      console.log("[BART] payload:", payload);
+      if (CONFIG.allowReplay) el.again.classList.remove("bt-hidden");
+      return;
+    }
+
+    el.send.textContent = "Saving your results…";
+    el.send.className = "bt-send";
+    el.retry.classList.add("bt-hidden");
+
+    fetch(CONFIG.endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json().catch(function () { return null; });
+      })
+      .then(function (data) {
+        S.sent = true;
+        el.send.textContent = "Results saved.";
+        el.send.className = "bt-send is-ok";
+        renderLeaderboard(data);
+        // Only now is it safe to offer a replay — the attempt is stored.
+        if (CONFIG.allowReplay) el.again.classList.remove("bt-hidden");
+      })
+      .catch(function (err) {
+        console.error("[BART] save failed:", err, payload);
+        el.send.textContent = "Couldn't save your results. Your score is safe on screen — try again.";
+        el.send.className = "bt-send is-fail";
+        el.retry.classList.remove("bt-hidden");
+        el.again.classList.add("bt-hidden");
+      });
+  }
+
+  /* ---------- replay ----------
+     A fresh attempt: new session_id, reshuffled queue, everything zeroed.
+     Practice is skipped — the participant has already done it once. */
+  function playAgain() {
+    buildQueue(false);
+    S.sessionId = newSessionId();
+    S.attempt += 1;
+    S.startedAt = new Date();
+    S.sessionClock0 = performance.now();
+    S.pumpTimes = [];
+    S.i = 0;
+    S.pumps = 0; S.burstPoint = 0; S.rts = []; S.lastPumpAt = 0;
+    S.totalEarnings = 0; S.potentialTotal = 0;
+    S.unexplodedPumps = []; S.trials = [];
+    S.busy = false; S.sent = false; S.breakShown = true; S.mainStarted = false;
+
+    el.retry.classList.add("bt-hidden");
+    el.again.classList.add("bt-hidden");
+    $("[data-lb]").classList.add("bt-hidden");
+    el.send.textContent = "Saving your results…";
+    el.send.className = "bt-send";
+
+    nextBalloon();
+  }
+
+  /* ---------- input ---------- */
+  root.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-action]");
+    if (!btn) return;
+    var a = btn.getAttribute("data-action");
+    if (a === "start")      { S.startedAt = new Date(); S.sessionClock0 = performance.now(); S.i = 0; nextBalloon(); }
+    if (a === "begin-main") { nextBalloon(); }
+    if (a === "pump")       { pump(); }
+    if (a === "collect")    { collect(); }
+    if (a === "again")      { playAgain(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (!$('[data-screen="task"]').classList.contains("bt-screen--on")) return;
+    if (e.code === "Space") { e.preventDefault(); pump(); }
+    if (e.code === "Enter") { e.preventDefault(); collect(); }
+  });
+
+})();
+</script>
